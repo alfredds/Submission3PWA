@@ -58,7 +58,7 @@ function showTeam(data) {
                 <tr>
                     <td>
                     <a href="./squad.html?id=${team.id}">
-                    <img class="responsive-img" src="${team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="40px" alt="badge"/>
+                    <img src="${team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="40px" alt="badge"/>
                     </a></td>
                     <td>${team.name}</td>
                     <td>${team.address}</td>
@@ -145,7 +145,7 @@ function showTeamById(squads){
         <div class="card" style="padding-left: 24px; padding-right: 24px; margin-top: 30px;">
             <div class="row">
             <div class="card-content small" style="text-align: center;">
-            <img class="responsive-img" src="${squads.crestUrl.replace(/^http:\/\//i, 'https://')}" width="50px" alt="badge"/>   
+            <img src="${squads.crestUrl.replace(/^http:\/\//i, 'https://')}" width="50px" alt="badge"/>   
             <h2 class="center responsive-text">${squads.name}</h2>
             </div>   
             <table class="striped responsive-table">
@@ -176,7 +176,7 @@ function getSaveTeam(){
                 <div class="row">
                     <div class="card-content small" style="text-align: center;">
                     <a href="./squad.html?id=${team.id}">
-                        <img class="responsive-image" src="${team.crestUrl.replace(/^http:\/\//i,'https://')}" width="50px" alt="badge/>
+                        <img src="${team.crestUrl.replace(/^http:\/\//i,'https://')}" width="50px" alt="badge/>
                     </a>
                     <h2 class="center responsive-text">${team.name}</h2>
                 </div>
@@ -223,7 +223,7 @@ function getSavedTeamById(){
                 <div class="row">
                     <div class="card-content small" style="text-align: center;">
                     <a href="./squad.html?id=${team.id}">
-                        <img class="responsive-image" src="${team.crestUrl.replace(/^http:\/\//i,'https://')}" width="50px" alt="badge/>
+                        <img src="${team.crestUrl.replace(/^http:\/\//i,'https://')}" width="50px" alt="badge/>
                     </a>
                     <h2 class="center responsive-text">${team.name}</h2>
                 /div>

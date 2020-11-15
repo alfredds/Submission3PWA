@@ -1,78 +1,62 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
-const CACHE_NAME = "football-fans-apps-v2";
+importScripts(
+    'https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js'
+);
 
-const urlsToCache = [
-    "/",
-    "/index.html",
-    "/nav.html",
-    "/squad.html",
-    "/manifest.json",
-    "/icons/favicon.png",
-    "/icons/apple-icon.png",
-    "/icons/pwa-32.png",
-    "/icons/pwa-192.png",
-    "/icons/pwa-512.png",
-    "/css/materialize.min.css",
-    "/js/api.js",
-    "/js/materialize.min.js",
-    "/js/idb.js",
-    "/js/db.js",
-    "/js/nav.js",
-    "/js/push.js",
-    "/js/req.js",
-    "/pages/team.html",
-    "/pages/saved.html",
-    "/pages/standing.html",
-    "/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
-    "https://fonts.googleapis.com/icon?family=Material+Icons"
-];
-
-self.addEventListener("install", function (event) {
-    self.skipWaiting();
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(function(cache) {
-            return cache.addAll(urlsToCache);
-        })
-    );
-});
-
-self.addEventListener("activate", function(event) {
-    clients.claim();
-    event.waitUntil(
-        caches.keys().then(function(cacheNames) {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log(`ServiceWorker: cache ${cacheName} dihapus`);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
-});
-
-self.addEventListener("fetch", function(event) {
-    const base_url = "https://api.football-data.org/v2/";
-    const online = navigator.onLine;
-
-    if (event.request.url.indexOf(base_url) > -1 && online){
-        event. respondWith(
-            caches.open(CACHE_NAME).then(function (cache) {
-                return fetch(event.request).then(function(response){
-                    cache.put(event.request.url, response.clone());
-                    return response;
-                })
-            })
-        );
-    } else {
-        event.respondWith(
-            caches.match(event.request, {'ignoreSearch': true}).then(function(response){
-                return response || fetch (event.request);
-            })
-        )
+workbox.precaching.precacheAndRoute ([
+        {url: "/", revision: "1"},
+        {url: "/index.html", revision: "1"},
+        {url: "/nav.html", revision: "1"},
+        {url: "/squad.html", revision: "1"},
+        {url: "/manifest.json", revision: "1"},
+        {url: "/icons/favicon.png", revision: "1"},
+        {url: "/icons/apple-icon.png", revision: "1"},
+        {url: "/icons/pwa-32.png", revision: "1"},
+        {url: "/icons/pwa-192.png", revision: "1"},
+        {url: "/icons/pwa-512.png", revision: "1"},
+        {url: "/css/materialize.min.css", revision: "1"},
+        {url: "/js/api.js", revision: "1"},
+        {url: "/js/materialize.min.js", revision: "1"},
+        {url: "/js/idb.js", revision: "1"},
+        {url: "/js/db.js", revision: "1"},
+        {url: "/js/nav.js", revision: "1"},
+        {url: "/js/push.js", revision: "1"},
+        {url: "/js/req.js", revision: "1"},
+        {url: "/pages/team.html", revision: "1"},
+        {url: "/pages/saved.html", revision: "1"},
+        {url: "/pages/standing.html", revision: "1"},
+        {url: "/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2", revision: "1"},
+        {url: "https://fonts.googleapis.com/icon?family=Material+Icons", revision: "1"},
+    ], {
+        ignoreUrlParametersMatching : [/.*/],
     }
-});
+);
+
+workbox.routing.registerRoute(
+    new RegExp("/pages/"),
+    workbox.strategies.staleWhileRevalidate({
+        cacheName : "pages"
+    })
+);
+
+workbox.routing.registerRoute(
+    /\.(?:png|gif|jpg|jpeg|svg)$/,
+    workbox.strategies.cacheFirst({
+        cacheName : "images",
+        plugins : [
+            new workbox.expiration.Plugin({
+                maxAgeSeconds: 30 * 24 * 60 * 60, //30 days
+                maxEntries: 60,
+            }),
+        ],
+    })
+);
+
+workbox.routing.registerRoute(
+    new RegExp("https://api.football-data.org/v2/"),
+    workbox.strategies.staleWhileRevalidate({
+        cacheName: "football-api",
+    })
+);
 
 self.addEventListener('push', event => {
     let body;

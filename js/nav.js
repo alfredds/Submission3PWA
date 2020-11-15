@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () =>{
                 } else if (this.status === 400) {
                     content.innerHTML = "<p> Halaman tidak ditemukan. </p>";
                 } else {
-                    content.innerHTML = "<p>Maaf.. Halaman tidak dapat diakses";
+                    content.innerHTML = "<p>Maaf.. Halaman tidak dapat diakses. </p>";
                 }
             }
         };
