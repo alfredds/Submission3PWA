@@ -31,6 +31,7 @@ workbox.precaching.precacheAndRoute ([
     }
 );
 
+//cache pages
 workbox.routing.registerRoute(
     new RegExp("/pages/"),
     workbox.strategies.staleWhileRevalidate({
@@ -38,6 +39,7 @@ workbox.routing.registerRoute(
     })
 );
 
+//cache images
 workbox.routing.registerRoute(
     /\.(?:png|gif|jpg|jpeg|svg)$/,
     workbox.strategies.cacheFirst({
@@ -51,6 +53,7 @@ workbox.routing.registerRoute(
     })
 );
 
+//cache football-api
 workbox.routing.registerRoute(
     new RegExp("https://api.football-data.org/v2/"),
     workbox.strategies.staleWhileRevalidate({
@@ -58,6 +61,7 @@ workbox.routing.registerRoute(
     })
 );
 
+//event push
 self.addEventListener('push', event => {
     let body;
     if (event.data){
